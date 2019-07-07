@@ -36,19 +36,32 @@ cacheSolve <- function(x, ...) {
   i
 }
 
-## testing and checking. First I make 2 matrices, then I use the functions made above 
-## to check their working:
+## Testing and checking from here. First I make 2 matrices, then I use the functions made above and do some things
+## to check if they work correctly. That is, returning an inverse matrix and using cache data when available.
 
-matrix1 <- matrix(1:4, 2, 2)
-inversematrix1 <- solve(matrix1)
-# inverse of inverse = original matrix again, just a check:
-solve(inversematrix1)
+TestMatrix <- matrix(1:4, 2, 2)
+TestInverseMatrix <- solve(TestMatrix)
+# inverse of inverse = original matrix again, just a little check. Executing of following two lines should return the
+# same result:
+solve(TestInverseMatrix)
+TestMatrix
 
+# making two lists using 'makeCacheMatrix'and the two matrices above:
+ListTestMatrix <- makeCacheMatrix(TestMatrix)
+ListTestInverseMatrix <- makeCacheMatrix(TestInverseMatrix)
 
-# should return the same matrix as inversematrix1
-cacheSolve(makeCacheMatrix(matrix1))
-print(inversematrix1)
+# to check if cacheSolve indeed returns the inverse of TestMatrix, also TestInverseMatrix is printed. 
+# The results of executing the following two lines should be the same:
+cacheSolve(ListTestMatrix)
+print(TestInverseMatrix)
 
-# should return the same matrix as matrix1 (because inverse of inverse = original)
-cacheSolve(makeCacheMatrix(inversematrix1))
-print(matrix1)
+## as well as vice versa:
+cacheSolve(ListTestInverseMatrix)
+print(TestMatrix)
+
+## At last I check whether indeed the cache data is returned, when the same matrix list has been used 
+## earlier as an argument in the cacheSolve function:
+
+cacheSolve(ListTestMatrix)    # result: inverse matrix + message 'getting cached data'
+cacheSolve(ListTestMatrix)    # result: inverse matrix + message 'getting cached data'
+cacheSolve(ListTestInverseMatrix)  # result: inverse matrix + message 'getting cached data'
